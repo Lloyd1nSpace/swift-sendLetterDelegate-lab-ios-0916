@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol LondonViewControllerDelegate: class {
+    func letterSent(from: LondonViewController, message: String)
+}
+
 class LondonViewController: UIViewController, UITextViewDelegate {
     
     // View elements
@@ -22,10 +26,9 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     
     // Keyboard height for adjusting view elements
     var keyboardHeight: CGFloat = 0
-    
+    weak var delegate: LondonViewControllerDelegate?
     
     // MARK: View Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,9 +38,11 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     }
     
     // MARK: Actions
-    
     @IBAction func sendButtonTapped(_ sender: UIButton) {
-        
+
+        delegate?.letterSent(from: self, message: letterTextView.text)
+//        NewYorkViewController().delegate = delegate
+
         animateLetter {
             self.dismiss(animated: true, completion: nil)
         }
@@ -49,29 +54,20 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     }
     
     // MARK: Animation
-    
     func animateLetter(completion: @escaping ()->()) {
         
         UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [], animations: {
-            
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.1, animations: {
-                
                 self.letterImageViewCenterXConstraint.constant = 30
                 self.letterTextViewCenterXConstraint.constant = 15
                 self.view.layoutIfNeeded()
-                
             })
             UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.9, animations: {
-                
                 self.letterTextViewCenterXConstraint.constant = -self.view.frame.width
                 self.view.layoutIfNeeded()
-                
             })
-            
         }) { _ in
-            
             completion()
-            
         }
     }
     
@@ -125,7 +121,7 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     // MARK: TextView Delegate
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-    
+        
         if text == "\n" {
             validateTextView()
         }
@@ -138,6 +134,12 @@ class LondonViewController: UIViewController, UITextViewDelegate {
         }
         return true
     }
-
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let dest = segue.destination as? NewYorkViewController {
+//            dest.delegate = delegate
+//        }
+    
+//    }
 }
 
