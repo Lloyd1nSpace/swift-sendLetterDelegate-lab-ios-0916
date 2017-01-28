@@ -39,10 +39,7 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     
     // MARK: Actions
     @IBAction func sendButtonTapped(_ sender: UIButton) {
-
         delegate?.letterSent(from: self, message: letterTextView.text)
-//        NewYorkViewController().delegate = delegate
-
         animateLetter {
             self.dismiss(animated: true, completion: nil)
         }
@@ -55,7 +52,6 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     
     // MARK: Animation
     func animateLetter(completion: @escaping ()->()) {
-        
         UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [], animations: {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.1, animations: {
                 self.letterImageViewCenterXConstraint.constant = 30
@@ -72,7 +68,6 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     }
     
     // MARK: Notifications
-    
     func addKeyboardNotificationObservers() {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
@@ -81,7 +76,6 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     }
     
     func adjustForKeyboard(notification: Notification) {
-        
         switch notification.name.rawValue {
         case "UIKeyboardWillChangeFrameNotification":
             let userInfo = notification.userInfo! as NSDictionary
@@ -104,9 +98,7 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     // MARK: Validation
     
     func validateTextView() {
-        
         if letterTextView.text.isEmpty {
-            
             let alertController = UIAlertController(title: "How Rude!", message: "Be a decent human being and send a thank you letter", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
             alertController.addAction(okAction)
@@ -121,7 +113,6 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     // MARK: TextView Delegate
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        
         if text == "\n" {
             validateTextView()
         }
@@ -134,12 +125,5 @@ class LondonViewController: UIViewController, UITextViewDelegate {
         }
         return true
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let dest = segue.destination as? NewYorkViewController {
-//            dest.delegate = delegate
-//        }
-    
-//    }
-}
 
+}

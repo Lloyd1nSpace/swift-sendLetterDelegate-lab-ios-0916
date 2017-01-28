@@ -20,19 +20,14 @@ class NewYorkViewController: UIViewController, LondonViewControllerDelegate {
     @IBOutlet weak var packageCenterXConstraint: NSLayoutConstraint!
     @IBOutlet weak var packageCenterYConstraint: NSLayoutConstraint!
     
-    weak var delegate: LondonViewControllerDelegate?
-    
     // MARK: View Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         receivedHeaderLabel.isHidden = true
         letterTextView.isHidden = true
     }
     
     // MARK: Action
-    
     @IBAction func sendButton(_ sender: UIButton) {
         animatePackage {
             self.performSegue(withIdentifier: "sentSegue", sender: nil)
@@ -40,52 +35,41 @@ class NewYorkViewController: UIViewController, LondonViewControllerDelegate {
     }
     
     // MARK: Segue
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "sentSegue" {}
+        if segue.identifier == "sentSegue",
+            let dest = segue.destination as? LondonViewController {
+            dest.delegate = self
+        }
     }
     
     // MARK: Animation
-    
     func animatePackage(completion: @escaping ()->()) {
-        
         UIView.animateKeyframes(withDuration: 0.7, delay: 0.0, options: [.calculationModeCubic], animations: {
-            
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.1, animations: {
-                
                 self.packageCenterYConstraint.constant = 10
                 self.packageCenterXConstraint.constant = 10
                 self.view.layoutIfNeeded()
                 
             })
             UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.4, animations: {
-                
                 self.packageCenterYConstraint.constant = -(self.view.frame.size.height/4)
                 self.packageCenterXConstraint.constant = -(self.view.frame.size.width * 0.1)
                 self.packageImageView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
                 self.view.layoutIfNeeded()
                 
             })
-            
             UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5, animations: {
-                
                 self.packageCenterXConstraint.constant = self.view.frame.size.width/2
                 self.packageCenterYConstraint.constant = -self.view.frame.size.height/2
                 self.packageImageView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
                 self.view.layoutIfNeeded()
-                
             })
-            
         }) { _ in
-            
             completion()
         }
-        
     }
     
     func letterSent(from: LondonViewController, message: String) {
-        delegate = self
-        //        delegate = from.delegate
         letterTextView.text = message
         letterTextView.isHidden = false
         receivedHeaderLabel.isHidden = false
