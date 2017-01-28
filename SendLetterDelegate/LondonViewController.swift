@@ -96,7 +96,6 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     }
     
     // MARK: Validation
-    
     func validateTextView() {
         if letterTextView.text.isEmpty {
             let alertController = UIAlertController(title: "How Rude!", message: "Be a decent human being and send a thank you letter", preferredStyle: .alert)
@@ -111,7 +110,6 @@ class LondonViewController: UIViewController, UITextViewDelegate {
     }
     
     // MARK: TextView Delegate
-    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             validateTextView()
